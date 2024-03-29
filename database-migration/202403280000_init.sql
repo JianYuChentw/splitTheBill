@@ -7,14 +7,16 @@ create table `members` (
 `username` varchar(50) not null comment '會員姓名' ,
 `phone_number` varchar(10) NOT NULL COMMENT '電話號碼',
 `password` varchar(16) not null comment '密碼' ,
-`email` varbinary(50) not null comment '信箱',
+`email` varchar(50) not null comment '信箱',
  `create_time` datetime  default current_timestamp comment '建立時間' ,
  `update_time` datetime  default current_timestamp comment '更新時間'
 )comment '會員列表' ;
 
 create table `expense_categories`(
 `categories_id` int auto_increment primary key comment '類別id',
-`category_title` varchar(50) not null comment '種類名稱'
+`category_title` varchar(50) not null comment '種類名稱',
+`creat_id` varchar(50) not null comment'建立者',
+`create_time` datetime  default current_timestamp comment '建立時間' 
 )comment '消費類型';
 
 create table `friends` (
