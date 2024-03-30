@@ -24,11 +24,11 @@ const userModel = require('../../app/models/user')
   async function testCreateUsers() {
     try {
         const result1 = await userModel.create(userObject1);
-        const result2 = await userModel.create(userObject2);
-        const result3 = await userModel.create(userObject3);
+        // const result2 = await userModel.create(userObject2);
+        // const result3 = await userModel.create(userObject3);
         console.log(result1);
-        console.log(result2);
-        console.log(result3);
+        // console.log(result2);
+        // console.log(result3);
     } catch (error) {
         console.error(error);
     }

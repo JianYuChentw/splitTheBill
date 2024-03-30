@@ -15,6 +15,9 @@ const userObject1 = {
     phoneNumber: '0901456783',
   }
 
+  const userObject4 = {
+  }
+
 
 
   async function testReadUsers() {
@@ -22,12 +25,14 @@ const userObject1 = {
         const result1 = await userModel.read(userObject1);
         const result2 = await userModel.read(userObject2);
         const result3 = await userModel.read(userObject3);
+        const result4 = await userModel.read(userObject4);
         console.log(result1);
         console.log(result2);
         console.log(result3);
+        console.log(result4);
     } catch (error) {
         console.error(error);
     }
 }
 
-// testReadUsers();
+testReadUsers();
