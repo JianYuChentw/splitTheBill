@@ -24,6 +24,7 @@ create table `friends` (
 `members_id1` int null null comment '會員id',
 `members_id2` int null null comment '會員好友id',
 `priority` int default 0 comment '優先度',
+`approve` int DEFAULT '0' COMMENT '批准',
 `create_time` datetime  default current_timestamp comment '建立時間',
 foreign key(members_id1) references members(members_id),
 foreign key(members_id2) references members(members_id)
