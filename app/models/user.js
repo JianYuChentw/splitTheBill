@@ -29,7 +29,7 @@ async function create(userObject) {
 }
 
 /**
- * 讀取符合條件使用者資訊
+ * 讀取符合條件使用者資訊(可以單或多條件)
  * @param {Object} indexObject 
  * @param {string} indexObject.username 使用者名稱
  * @param {string} indexObject.phoneNumber 使用者電話號碼
@@ -43,7 +43,18 @@ async function read(indexObject) {
     if (!username && !phoneNumber && !email) {
       return ;
     }
-    let sql = `select members_id,username, phone_number, email from members where 1=1 `;
+    let sql = `select 
+        members_id as membersId,
+        level,
+        username,
+        phone_number as phoneNumber,
+        password,
+        email,
+        date_format(create_time, '%Y/%m/%d %H:%i:%s') as createtime ,
+        date_format(update_time, '%Y/%m/%d %H:%i:%s') as updatetime
+      from 
+        members 
+      where 1=1 `;
     let values = [];
 
     if (username) {
@@ -74,7 +85,7 @@ async function read(indexObject) {
  * 更新使用者密碼
  * @param {number} uid 使用者id 
  * @param {string} newPassword 新密碼
- * @returns {Promise<boolean>}
+ * @returns {Promise<number>} 回傳異動row
  */
 
 async function updatePassword(uid, newPassword) {

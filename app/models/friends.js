@@ -30,14 +30,21 @@ async function create(usersObject) {
  * @param {object} usersFriendsObject
  * @param {number} usersFriendsObject.users1  使用者1
  * @param {number} usersFriendsObject.approve 0:解除, 1:好友, 2:已申請, 3:待回覆
- * @returns {Promise<[]>}
+ * @returns {Promise<Array<{members_id2: number, username: string}>>}
  */
 async function getUserFriends(usersFriendsObject) {
   try {
     const { uid1, approve } = usersFriendsObject;
-    const sql = `select f.members_id2, m.username 
-        from friends f 
-        join members m on f.members_id2 = m.members_id 
+    const sql = 
+        `select 
+            f.members_id2, 
+            m.username ,
+            date_format(f.create_time, '%Y/%m/%d %H:%i:%s') as createtime ,
+            date_format(f.update_time, '%Y/%m/%d %H:%i:%s') as updatetime
+        from 
+            friends f 
+        join 
+            members m on f.members_id2 = m.members_id 
         where 
         f.members_id1 = ? and f.approve = ?`;
 
@@ -56,6 +63,7 @@ async function getUserFriends(usersFriendsObject) {
  * @param {number} usersFriendsObject.uid1  使用者1
  * @param {number} usersFriendsObject.uid1  使用者2
  * @param {number} usersFriendsObject.approve 0:解除, 1:好友, 2:已申請, 3:待回覆
+ * @returns {Promise<number>} 回傳異動行數
  */
 async function updateFriendRelation(usersFriendsObject) {
     try {
