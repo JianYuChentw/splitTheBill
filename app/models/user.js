@@ -1,5 +1,5 @@
 const {pool} = require('../database/db')
-const {responseStatus} =require('../utils//response-status')
+const responseStatus =require('../utils//response-status')
 
 
 /**
@@ -23,7 +23,8 @@ async function create(userObject) {
     ]);
     return { affectedRows, insertId };
   } catch (error) {
-    throw new Error(responseStatus.DATABASE_CREATE_USER_ERROR.msg, error.message);
+    console.log(error);
+    throw new Error(responseStatus.DATABASE_CREATE_USER_ERROR.msg);
   }
 }
 
@@ -63,7 +64,8 @@ async function read(indexObject) {
     const [result] = await pool.query(sql, values);
     return result[0];
   } catch (error) {
-    throw new Error(responseStatus.DATABASE_READ_USER_ERROR, error.message);
+    console.log(error);
+    throw new Error(responseStatus.DATABASE_READ_USER_ERROR.msg);
   }
 }
 
@@ -77,14 +79,17 @@ async function read(indexObject) {
 
 async function updatePassword(uid, newPassword) {
   try {
-    let sql = `update members set password = ? where members_id = ?`;
+    let sql = `update members set password = ? , update_time = CURRENT_TIMESTAMP  where members_id = ?`;
     const values = [newPassword, uid] 
     const [result] = await pool.query(sql, values);
     return result.affectedRows
   } catch (error) {
-    throw new Error(responseStatus.DATABASE_UPDATE_USER_ERROR, error.message);
+    console.log(error);
+    throw new Error(responseStatus.DATABASE_UPDATE_USER_ERROR.msg);
   }
 }
+
+updatePassword(5,'dijfhiuwe')
 
 
 module.exports = {

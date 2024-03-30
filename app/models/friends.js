@@ -20,10 +20,8 @@ async function create(usersObject) {
     ]);
     return { affectedRows, insertId };
   } catch (error) {
-    throw new Error(
-      responseStatus.DATABASE_CREATE_FRIENDS_ERROR,
-      error.message
-    );
+    console.log(error);
+    throw new Error(responseStatus.DATABASE_CREATE_FRIENDS_ERROR.msg);
   }
 }
 
@@ -36,17 +34,18 @@ async function create(usersObject) {
  */
 async function getUserFriends(usersFriendsObject) {
   try {
-    const { users1, approve } = usersFriendsObject;
+    const { uid1, approve } = usersFriendsObject;
     const sql = `select f.members_id2, m.username 
         from friends f 
         join members m on f.members_id2 = m.members_id 
         where 
         f.members_id1 = ? and f.approve = ?`;
 
-    const [result] = await pool.query(sql, [users1, approve]);
+    const [result] = await pool.query(sql, [uid1, approve]);
     return result;
   } catch (error) {
-    throw new Error(responseStatus.DATABASE_GET_FRIENDS_ERROR, error.message);
+    console.log(error);
+    throw new Error(responseStatus.DATABASE_GET_FRIENDS_ERROR.msg);
   }
 }
 
@@ -54,12 +53,26 @@ async function getUserFriends(usersFriendsObject) {
 /**
  * 更新好友關係
  * @param {object} usersFriendsObject
- * @param {number} usersFriendsObject.users1  使用者1
+ * @param {number} usersFriendsObject.uid1  使用者1
+ * @param {number} usersFriendsObject.uid1  使用者2
  * @param {number} usersFriendsObject.approve 0:解除, 1:好友, 2:已申請, 3:待回覆
  */
-async function updateFriendRelation(users2) {}
+async function updateFriendRelation(usersFriendsObject) {
+    try {
+        const {uid1, uid2, approve} = usersFriendsObject
+        const sql = `update friends  set approve = ? , update_time = CURRENT_TIMESTAMP  where members_id1 = ? and members_id2 = ?`
+        const [result] = await pool.query(sql,[approve, uid1, uid2 ])
+        return result.changedRows
+    } catch (error) {
+        console.log(error);
+        throw new Error(responseStatus.DATABASE_UPDATE_FRIENDS_ERROR.msg);
+    }
+}
+
+
 
 module.exports = {
   create,
   getUserFriends,
+  updateFriendRelation
 };
