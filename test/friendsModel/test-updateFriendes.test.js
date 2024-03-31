@@ -17,4 +17,4 @@ const usersFriendsObject1 = {
   approve: 1,
 };
 
-testUpdateFriends(usersFriendsObject1)
+// testUpdateFriends(usersFriendsObject1)

@@ -1,8 +1,12 @@
 const express = require('express');
-const userController = require('../controller/user.js');
+const app = express();
 
-const router = express.Router();
 
-// router.get('/addAdmin', userController);
+  
+  app.use(express.json({ limit: '2mb' }));
+  app.use(express.urlencoded({ extended: false }));
 
-module.exports = router;
+  app.use('/users',require('../routers/user.js'))
+//   require('./friends')(app);
+
+module.exports = app;

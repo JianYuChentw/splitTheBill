@@ -12,20 +12,23 @@ const pool = mysql.createPool({
 });
 
 async function testConnection() {
+  let conn;
   try {
-    const conn = await pool.getConnection();
+    conn = await pool.getConnection();
     const [rows, errors] = await conn.query(
       'select *from expense_categories limit 1'
     );
     conn.release();
     console.log('成功連線資料庫');
+    await pool.end(); // 在連線成功建立後關閉連線
   } catch (error) {
     console.log('連線資料庫失敗');
     console.log(error.stack);
+    if (conn) {
+      conn.release(); // 確保釋放資源
+    }
   }
 }
-
-testConnection();
 
 module.exports = {
   pool,
