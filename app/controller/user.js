@@ -1,5 +1,4 @@
 const usersModel = require('../models/user');
-const { get } = require('../routers');
 const responseStatus =require('../utils/response-status')
 
 
@@ -15,6 +14,7 @@ const userController = {
     try {
       const { username, password } = req.body;
       const findedUser = await usersModel.read({ username: username });
+      const roleTag = 'uid'
 
       if (findedUser.password != password || findedUser.username != username) {
         return res.json(responseStatus.LOGIN_FAIL);
@@ -36,7 +36,7 @@ const userController = {
         }
       });
 
-      req.session.uid = findedUser.membersId;
+      req.session[roleTag] = findedUser.membersId;
       return res.json(responseStatus.SUCCESS);
     } catch (error) {
       console.log(error);
@@ -50,12 +50,42 @@ const userController = {
    */
    userDate: async (req, res) => {
     try {
-      console.log(req.sessionStore.sessions);
+      const uid = req.uid
+      const result = await usersModel.read({uid:uid}) 
+
+      responseStatus.SUCCESS.data = {
+        level: result.level,
+        username: result.username,
+        phoneNumber: result.phone_number,
+        email: result.email,
+        createtime: result.createtime,
+        updatetime: result.updatetime
+      };
       return res.json(responseStatus.SUCCESS);
     } catch (error) {
       console.log(error);
     }
   },
+  
+  /**
+   * 更新密碼
+   * @param { Request } req
+   * @param { Response } res
+   */
+  updatePassword: async (req, res) => {
+    try {
+      const uid = req.uid
+      const newPassword = req.body.newPassword
+      const result = await usersModel.updatePassword(uid, newPassword)
+      if (!result || result.code === '0013') {
+        return res.json(responseStatus.SYSTEM_ERROR)
+      }
+   
+      return res.json(responseStatus.SUCCESS)
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 

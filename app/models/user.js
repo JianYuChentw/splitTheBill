@@ -31,6 +31,7 @@ async function create(userObject) {
 /**
  * 讀取符合條件使用者資訊(可以單或多條件)
  * @param {Object} indexObject 
+ * @param {string} indexObject.uid 使用者Id
  * @param {string} indexObject.username 使用者名稱
  * @param {string} indexObject.phoneNumber 使用者電話號碼
  * @param {string} indexObject.password 使用者電話號碼
@@ -39,9 +40,8 @@ async function create(userObject) {
  */
 async function read(indexObject) {
   try {
-    const { username, phoneNumber, email } = indexObject;
-    
-    if (!username && !phoneNumber && !email) {
+    const { uid, username, phoneNumber, email } = indexObject;
+    if (!uid && !username && !phoneNumber && !email) {
       return ;
     }
     let sql = `select 
@@ -57,6 +57,11 @@ async function read(indexObject) {
         members 
       where 1=1 `;
     let values = [];
+
+    if (uid) {
+      sql += `and members_id = ?`;
+      values.push(uid);
+    }
 
     if (username) {
       sql += `and username = ?`;
