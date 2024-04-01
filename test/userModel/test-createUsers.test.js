@@ -1,38 +1,24 @@
 const userModel = require('../../app/models/user')
+const {pool} = require('../../app/database/db')
   
   const userObject1 = {
-    username: 'user2',
-    phoneNumber: '0902345678',
-    password: 'password2',
-    email: 'user2@example.com'
-  }
-  
-  const userObject2 = {
-    username: 'user3',
-    phoneNumber: '0903456782',
-    password: 'password3',
-    email: 'user3@example.com'
-  }
-  
-  const userObject3 = {
-    username: 'user4',
-    phoneNumber: '0901456783',
-    password: 'password4',
-    email: 'user4@example.com',
+    username: 'testMan',
+    phoneNumber: '0988186690',
+    password: 'password999',
+    email: 'testMan@example.com'
   }
 
-  async function testCreateUsers() {
+
+describe('創建新使用者', () => {
+  it('創建', async () => {
     try {
-        const result1 = await userModel.create(userObject1);
-        // const result2 = await userModel.create(userObject2);
-        // const result3 = await userModel.create(userObject3);
-        console.log(result1);
-        // console.log(result2);
-        // console.log(result3);
+      const result = await userModel.create(userObject1);
+      expect(result.affectedRows).toEqual(1);
     } catch (error) {
-        console.error(error);
+      throw error;
+    } finally {
+      await pool.end();
     }
-}
-
-// testCreateUsers()
+  });
+});
 

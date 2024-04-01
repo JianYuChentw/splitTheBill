@@ -1,12 +1,16 @@
 const userModel = require('../../app/models/user')
+const {pool} = require('../../app/database/db')
 
-async function testUpdatePassword(uid, newpassword) {
-    try {
-        const result = await userModel.updatePassword(uid, newpassword)
-        console.log(result);
-    } catch (error) {
-        console.error(error);
-    }
-}
 
-// testUpdatePassword(4, 'dsf8984894')
+describe('測試更新密碼' ,() => {
+    it ('更新', async () => {
+        try {
+            const result = await userModel.updatePassword(4, 'changePassword')
+            expect(result).toEqual(1)
+        } catch (error) {
+            throw error
+        }finally {
+            await pool.end()
+        }
+    })
+})

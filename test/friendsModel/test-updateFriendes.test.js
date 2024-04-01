@@ -1,15 +1,5 @@
 const friendsModel = require('../../app/models/friends')
-
-
-
-async function testUpdateFriends(usersFriendsObject){
-    try {
-        const result = await friendsModel.updateFriendRelation(usersFriendsObject)
-        console.log(result);
-    } catch (error) {
-        throw new Error(error)
-    }
-}
+const {pool} = require('../../app/database/db');
 
 const usersFriendsObject1 = {
   uid1: 11,
@@ -17,4 +7,21 @@ const usersFriendsObject1 = {
   approve: 1,
 };
 
-// testUpdateFriends(usersFriendsObject1)
+describe('更新好友關係', () => {
+  it('更新', async () => {
+    try {
+      // 呼叫Update
+      const result = await friendsModel.updateFriendRelation(
+        usersFriendsObject1
+      );
+
+      // 斷言
+      expect(result).toEqual(0);
+    } catch (error) {
+      throw error;
+    } finally {
+      await pool.end();
+    }
+  });
+});
+

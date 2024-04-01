@@ -7,7 +7,6 @@ const userController = {
     try {
         const { username, password } = req.body
         const userDate = await usersModel.read({username:username}) 
-        console.log(userDate);
         if (userDate.password != password || userDate.username != userDate.username) {
             return res.json(responseStatus.LOGIN_FAIL)
         }

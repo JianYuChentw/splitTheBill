@@ -1,4 +1,5 @@
 const userModel = require('../../app/models/user')
+const {pool} = require('../../app/database/db')
 
 
 const userObject1 = {
@@ -10,29 +11,16 @@ const userObject1 = {
     email: 'user3@example.com'
   }
   
-  const userObject3 = {
-    username: 'user5',
-    phoneNumber: '0901456783',
-  }
-
-  const userObject4 = {
-  }
-
-
-
-  async function testReadUsers() {
+describe('測試以條件選擇讀取使用者', () => {
+  it('讀取', async () => {
     try {
-        const result1 = await userModel.read(userObject1);
-        const result2 = await userModel.read(userObject2);
-        const result3 = await userModel.read(userObject3);
-        const result4 = await userModel.read(userObject4);
-        console.log(result1);
-        console.log(result2);
-        console.log(result3);
-        console.log(result4);
+      const result = await userModel.read(userObject1);
+      expect(Object);
     } catch (error) {
-        console.error(error);
+      throw error;
+    } finally {
+      await pool.end();
     }
-}
+  });
+});
 
-// testReadUsers();
