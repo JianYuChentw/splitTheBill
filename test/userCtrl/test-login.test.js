@@ -11,7 +11,7 @@ describe('POST /users/login', () => {
   it('responds with JSON', (done) => {
     request(app)
       .post('/users/login')
-      .send({ username: 'user4', password: 'dsf8984894' })
+      .send({ username: 'user4', password: 'changePassword' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200)

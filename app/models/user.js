@@ -35,7 +35,7 @@ async function create(userObject) {
  * @param {string} indexObject.phoneNumber 使用者電話號碼
  * @param {string} indexObject.password 使用者電話號碼
  * @param {string} indexObject.email 使用者電子郵件地址
- * @returns {Promise<{ members_id: number, username: string, phone_number: string, email:string}>}
+ * @returns {Promise<{ membersId: number, username: string, phone_number: string, email:string}>}
  */
 async function read(indexObject) {
   try {

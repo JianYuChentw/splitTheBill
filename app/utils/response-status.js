@@ -15,6 +15,7 @@ const status ={
     // 使用者
   
     LOGIN_FAIL:customRes('0003','登入失敗，請重新確認名稱或密碼。'),
+    NOT_LOGIN_USER:customRes('0004','非登入狀態，請重新登入。'),
 
 
     // Database Response
