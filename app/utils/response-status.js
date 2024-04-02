@@ -1,7 +1,7 @@
 function customRes(code,msg) {
     return{
         code:code,
-        msg:msg ||''
+        message:msg ||''
     }
 }
 
@@ -16,6 +16,7 @@ const status ={
   
     LOGIN_FAIL:customRes('0003','登入失敗，請重新確認名稱或密碼。'),
     NOT_LOGIN_USER:customRes('0004','非登入狀態，請重新登入。'),
+    OPERATE_ERROR:customRes('0005','操作失敗，請重新嘗試。'),
 
 
     // Database Response

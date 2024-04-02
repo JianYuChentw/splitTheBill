@@ -1,5 +1,6 @@
 const {pool} = require('../database/db')
-const responseStatus =require('../utils//response-status')
+const responseStatus =require('../utils//response-status');
+const AppError = require('../utils/handleError');
 
 
 /**
@@ -23,8 +24,8 @@ async function create(userObject) {
     ]);
     return { affectedRows, insertId };
   } catch (error) {
-    console.log(error);
-    throw new Error(responseStatus.DATABASE_CREATE_USER_ERROR.msg);
+    console.error(error)
+    throw new AppError(responseStatus.DATABASE_CREATE_USER_ERROR);
   }
 }
 
@@ -82,7 +83,7 @@ async function read(indexObject) {
     return result[0];
   } catch (error) {
     console.log(error);
-    throw new Error(responseStatus.DATABASE_READ_USER_ERROR.msg);
+    throw new AppError(responseStatus.DATABASE_READ_USER_ERROR);
   }
 }
 
@@ -102,7 +103,7 @@ async function updatePassword(uid, newPassword) {
     return result.affectedRows
   } catch (error) {
     console.log(error);
-    throw new Error(responseStatus.DATABASE_UPDATE_USER_ERROR.msg);
+    throw new AppError(responseStatus.DATABASE_UPDATE_USER_ERROR);
   }
 }
 

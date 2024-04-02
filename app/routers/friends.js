@@ -1,18 +1,13 @@
 const express = require('express');
-
+const router = express.Router();
 const friendsCtrl = require('../controller/friends')
 
-module.exports = (app) => {
-    const router = express.Router();
-
-    router.group =({ prefix:'/frieds'}, router => {
-        
 
 
-    
+router.get('/all', friendsCtrl.getFriends)
+router.post('/new', friendsCtrl.nweApprove)
+router.put('/approve', friendsCtrl.updateApprove)
 
 
 
-    })
-   
-}
+module.exports = router

@@ -1,7 +1,6 @@
 const usersModel = require('../models/user');
 const responseStatus =require('../utils/response-status')
-
-
+const AppError = require('../utils/handleError')
 
 
 const userController = {
@@ -14,7 +13,7 @@ const userController = {
     try {
       const { username, password } = req.body;
       const findedUser = await usersModel.read({ username: username });
-      const roleTag = 'uid'
+      const roleTag = 'uid';
 
       if (findedUser.password != password || findedUser.username != username) {
         return res.json(responseStatus.LOGIN_FAIL);
@@ -39,7 +38,8 @@ const userController = {
       req.session[roleTag] = findedUser.membersId;
       return res.json(responseStatus.SUCCESS);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return res.json(responseStatus.OPERATE_ERROR);
     }
   },
 
@@ -48,10 +48,10 @@ const userController = {
    * @param { Request } req
    * @param { Response } res
    */
-   userDate: async (req, res) => {
+  userDate: async (req, res) => {
     try {
-      const uid = req.uid
-      const result = await usersModel.read({uid:uid}) 
+      const uid = req.uid;
+      const result = await usersModel.read({ uid: uid });
 
       responseStatus.SUCCESS.data = {
         level: result.level,
@@ -59,14 +59,15 @@ const userController = {
         phoneNumber: result.phone_number,
         email: result.email,
         createtime: result.createtime,
-        updatetime: result.updatetime
+        updatetime: result.updatetime,
       };
       return res.json(responseStatus.SUCCESS);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return res.json(responseStatus.OPERATE_ERROR);
     }
   },
-  
+
   /**
    * 更新密碼
    * @param { Request } req
@@ -74,18 +75,16 @@ const userController = {
    */
   updatePassword: async (req, res) => {
     try {
-      const uid = req.uid
-      const newPassword = req.body.newPassword
-      const result = await usersModel.updatePassword(uid, newPassword)
-      if (!result || result.code === '0013') {
-        return res.json(responseStatus.SYSTEM_ERROR)
-      }
-   
-      return res.json(responseStatus.SUCCESS)
+      const uid = req.uid;
+      const newPassword = req.body.newPassword;
+      const result = await usersModel.updatePassword(uid, newPassword);
+
+      return res.json(responseStatus.SUCCESS);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      return res.json(responseStatus.OPERATE_ERROR);
     }
-  }
+  },
 };
 
 

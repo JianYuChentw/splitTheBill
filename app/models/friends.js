@@ -1,5 +1,7 @@
 const { pool } = require('../database/db');
 const responseStatus = require('../utils/response-status');
+const AppError = require('../utils/handleError');
+
 
 /**
  * 創建新好友關係
@@ -21,7 +23,7 @@ async function create(usersObject) {
     return { affectedRows, insertId };
   } catch (error) {
     console.log(error);
-    throw new Error(responseStatus.DATABASE_CREATE_FRIENDS_ERROR.msg);
+    throw new AppError(responseStatus.DATABASE_CREATE_FRIENDS_ERROR);
   }
 }
 
@@ -52,7 +54,7 @@ async function getUserFriends(usersFriendsObject) {
     return result;
   } catch (error) {
     console.log(error);
-    throw new Error(responseStatus.DATABASE_GET_FRIENDS_ERROR.msg);
+    throw new AppError(responseStatus.DATABASE_GET_FRIENDS_ERROR);
   }
 }
 
@@ -73,7 +75,7 @@ async function updateFriendRelation(usersFriendsObject) {
         return result.changedRows
     } catch (error) {
         console.log(error);
-        throw new Error(responseStatus.DATABASE_UPDATE_FRIENDS_ERROR.msg);
+        throw new AppError(responseStatus.DATABASE_UPDATE_FRIENDS_ERROR);
     }
 }
 
