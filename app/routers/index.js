@@ -7,6 +7,6 @@ const app = express();
   app.use(express.urlencoded({ extended: false }));
 
   app.use('/users',require('../routers/user.js'))
-  app.use('./friends', require('../routers/friends.js'));
+  app.use('/friends', require('../routers/friends.js'));
 
 module.exports = app;

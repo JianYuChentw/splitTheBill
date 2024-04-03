@@ -4,13 +4,13 @@ const { pool } = require('../../app/database/db'); // 導入資料庫連線池
 
 const respondsResult = {
   code: '0001',
-  msg: '成功。',
+  message: '成功。',
   data: {
     level: 0,
     username: 'user4',
     email: 'user4@example.com',
     createtime: '2024/03/29 20:03:36',
-    updatetime: '2024/04/01 16:45:12',
+    updatetime: '2024/04/03 13:19:52',
   },
 };
 
@@ -20,7 +20,7 @@ describe('User Authentication Tests', () => {
   beforeAll((done) => {
     request(app)
       .post('/users/login') 
-      .send({ username: 'user4', password: 'newpass' })
+      .send({ username: 'user4', password: 'new' })
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200)

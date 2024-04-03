@@ -15,7 +15,7 @@ const userController = {
       const findedUser = await usersModel.read({ username: username });
       const roleTag = 'uid';
 
-      if (findedUser.password != password || findedUser.username != username) {
+      if (!findedUser || findedUser.password != password) {
         return res.json(responseStatus.LOGIN_FAIL);
       }
 
@@ -42,6 +42,7 @@ const userController = {
       return res.json(responseStatus.OPERATE_ERROR);
     }
   },
+  
   /**
    * 使用者登出
    * @param { Request } req
