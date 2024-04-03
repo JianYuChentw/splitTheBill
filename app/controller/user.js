@@ -29,13 +29,27 @@ const userController = {
             if (err) {
               console.error('登出前裝置發生錯誤:', err);
             } else {
-              console.log('出登出前裝置：', sessionID);
+              console.log('登出前裝置：', sessionID);
             }
           });
         }
       });
 
       req.session[roleTag] = findedUser.membersId;
+      return res.json(responseStatus.SUCCESS);
+    } catch (error) {
+      console.error(error);
+      return res.json(responseStatus.OPERATE_ERROR);
+    }
+  },
+  /**
+   * 使用者登出
+   * @param { Request } req
+   * @param { Response} res
+   */
+  logOut: async (req, res) => {
+    try {
+      req.session.destroy();
       return res.json(responseStatus.SUCCESS);
     } catch (error) {
       console.error(error);
@@ -52,16 +66,19 @@ const userController = {
     try {
       const uid = req.uid;
       const result = await usersModel.read({ uid: uid });
-
-      responseStatus.SUCCESS.data = {
-        level: result.level,
-        username: result.username,
-        phoneNumber: result.phone_number,
-        email: result.email,
-        createtime: result.createtime,
-        updatetime: result.updatetime,
+      const respondsData = {
+        ...responseStatus.SUCCESS,
+        data: {
+          level: result.level,
+          username: result.username,
+          phoneNumber: result.phone_number,
+          email: result.email,
+          createtime: result.createtime,
+          updatetime: result.updatetime,
+        }
       };
-      return res.json(responseStatus.SUCCESS);
+    
+      return res.json(respondsData);
     } catch (error) {
       console.error(error);
       return res.json(responseStatus.OPERATE_ERROR);
