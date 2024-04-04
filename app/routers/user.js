@@ -6,10 +6,14 @@ const userCtrl = require('../controller/user');
 
 
 
-  
-router.get('/resume', roleGuard('uid'), userCtrl.userDate)
+
 
 router.post('/login', userCtrl.login)
+
+router.post('/register', userCtrl.register)
+
+  
+router.get('/resume', roleGuard('uid'), userCtrl.userDate)
 
 router.put('/password', roleGuard('uid'), userCtrl.updatePassword)
 

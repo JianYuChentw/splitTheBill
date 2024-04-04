@@ -1,9 +1,41 @@
 const usersModel = require('../models/user');
 const responseStatus =require('../utils/response-status')
+const verify = require('../utils/validator')
 const AppError = require('../utils/handleError')
 
 
 const userController = {
+  /**
+   * 註冊
+   * @param {Request} req
+   * @param {Response}res
+   */
+  register:async (req, res) => {
+    try {
+      const { username, phoneNumber, password, email } = req.body;
+      if (
+        !verify.userName(username) &&
+        !verify.password(password) &&
+        !verify.phoneNumber(phoneNumber) &&
+        !verify.email(email)
+      ) {
+        return res.json(responseStatus.PARAMETER_LIMIT);
+      }
+      const ishaveUser = await usersModel.read({phoneNumber});
+      if (ishaveUser) {
+        return res.json(responseStatus.PHONENUMBER_IS_EXIST);
+      }
+
+      const createResult = await usersModel.create({username, phoneNumber, password, email })
+      if (createResult.affectedRows === 0) {
+        return res.json(OPERATE_ERROR)
+      }
+      return res.json(responseStatus.SUCCESS);
+    } catch (error) {
+      console.error(error);
+      return res.json(responseStatus.OPERATE_ERROR);
+    }
+  },
   /**
    * 使用者登入
    * @param { Request } req
@@ -42,7 +74,7 @@ const userController = {
       return res.json(responseStatus.OPERATE_ERROR);
     }
   },
-  
+
   /**
    * 使用者登出
    * @param { Request } req
@@ -76,9 +108,9 @@ const userController = {
           email: result.email,
           createtime: result.createtime,
           updatetime: result.updatetime,
-        }
+        },
       };
-    
+
       return res.json(respondsData);
     } catch (error) {
       console.error(error);
@@ -95,7 +127,11 @@ const userController = {
     try {
       const uid = req.uid;
       const newPassword = req.body.newPassword;
-      const result = await usersModel.updatePassword(uid, newPassword);
+
+      if (!verify.password(newPassword) ) {
+        return res.json(responseStatus.PARAMETER_LIMIT);
+      }
+       await usersModel.updatePassword(uid, newPassword);
 
       return res.json(responseStatus.SUCCESS);
     } catch (error) {
