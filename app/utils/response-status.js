@@ -19,6 +19,8 @@ const status ={
     OPERATE_ERROR:customRes('0005','操作失敗，請重新嘗試。'),
     PARAMETER_LIMIT:customRes('0006','參數不符合限制。'),
     PHONENUMBER_IS_EXIST:customRes('0007','電話已註冊。'),
+    NOT_HAVE_USER:customRes('0008','無此用戶。'),
+    NOT_CANT_FRIEND:customRes('0009','無法為此對象邀請好友。'),
 
 
     // Database Response

@@ -37,10 +37,13 @@ async function create(usersObject) {
 async function getUserFriends(usersFriendsObject) {
   try {
     const { uid1, approve } = usersFriendsObject;
-    const sql = 
-        `select 
+
+    let condition = [uid1];
+
+    let sql = `select 
             f.members_id2, 
             m.username ,
+            approve ,
             date_format(f.create_time, '%Y/%m/%d %H:%i:%s') as createtime ,
             date_format(f.update_time, '%Y/%m/%d %H:%i:%s') as updatetime
         from 
@@ -48,9 +51,14 @@ async function getUserFriends(usersFriendsObject) {
         join 
             members m on f.members_id2 = m.members_id 
         where 
-        f.members_id1 = ? and f.approve = ?`;
+        f.members_id1 = ? `;
 
-    const [result] = await pool.query(sql, [uid1, approve]);
+    if (approve) {
+      sql += `and f.approve = ?`;
+      condition.push(approve);
+    }
+
+    const [result] = await pool.query(sql, condition);
     return result;
   } catch (error) {
     console.log(error);
