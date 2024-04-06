@@ -8,7 +8,7 @@ const userController = {
   /**
    * 註冊
    * @param {Request} req
-   * @param {Response}res
+   * @param {Response} res
    */
   register:async (req, res) => {
     try {

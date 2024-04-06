@@ -1,13 +1,23 @@
 const friendsModel = require('../models/friends')
 const userModel = require('../models/user')
 const responseStatus = require('../utils/response-status')
-
+const verify = require('../utils/validator')
+ 
 const friendsController = {
+  /**
+   * 獲取當前好友
+   * @param { Request } req
+   * @param { Response } res
+   * @returns
+   */
   getFriends: async (req, res) => {
     try {
       const uid = req.uid;
-      //TODO:驗證不能使用0
       const { approve } = req.query;
+
+      if (verify.approveLimit(Number(approve))) {
+        return res.json(responseStatus.PARAMETER_LIMIT);
+      }
       const usersFriendsObject = { uid1: uid, approve: Number(approve) };
       const getUserFriends = await friendsModel.getUserFriends(
         usersFriendsObject
@@ -23,7 +33,12 @@ const friendsController = {
       return res.json(responseStatus.OPERATE_ERROR);
     }
   },
-
+  /**
+   * 提出好友邀請
+   * @param { Request } req
+   * @param { Request } res
+   * @returns
+   */
   nweApprove: async (req, res) => {
     try {
       const uid = req.uid;
@@ -36,7 +51,10 @@ const friendsController = {
 
       const isUserFriends = await friendsModel.getUserFriends({ uid1: uid2 });
 
-      if (uid2 == uid ||  (isUserFriends.length > 0 && isUserFriends[0].approve > 0)) {
+      if (
+        uid2 == uid ||
+        (isUserFriends.length > 0 && isUserFriends[0].approve > 0)
+      ) {
         return res.json(responseStatus.NOT_CANT_FRIEND);
       }
 
@@ -49,10 +67,57 @@ const friendsController = {
       return res.json(responseStatus.OPERATE_ERROR);
     }
   },
-  updateApprove: async (req, res) => {
+  Approve: async (req, res) => {
     try {
     } catch (error) {
       console.error(error);
+      return res.json(responseStatus.OPERATE_ERROR);
+    }
+  },
+  /**
+   * 答覆允許好友邀請
+   * @param { Request } req
+   * @param { Response } res
+   * @returns
+   */
+  promiseApprove: async (req, res) => {
+    try {
+      const uid1 = req.uid;
+      const username = req.query.userName;
+      const { membersId: uid2 } = await userModel.read({ username });
+
+      const ishaveApproved = await friendsModel.findFriends({
+        uid1,
+        uid2,
+        approve: 3,
+      });
+      const ishaveResponds = await friendsModel.findFriends({
+        uid1: uid2,
+        uid2: uid1,
+        approve: 2,
+      });
+
+      if (ishaveApproved.length === 0 || ishaveResponds.length === 0) {
+        return res.json(responseStatus.INVALID_OPERATE);
+      }
+
+      friendsModel.updateFriendRelation({ uid1, uid2, approve: 1 });
+      friendsModel.updateFriendRelation({ uid1: uid2, uid2: uid1, approve: 1 });
+
+      return res.json(responseStatus.SUCCESS);
+    } catch (error) {
+      return res.json(responseStatus.OPERATE_ERROR);
+    }
+  },
+  /**
+   * 解除好友關係
+   * @param { Request } req
+   * @param { Response } res
+   * @returns
+   */
+  removeApprove: async (req, res) => {
+    try {
+    } catch (error) {
       return res.json(responseStatus.OPERATE_ERROR);
     }
   },

@@ -21,6 +21,7 @@ const status ={
     PHONENUMBER_IS_EXIST:customRes('0007','電話已註冊。'),
     NOT_HAVE_USER:customRes('0008','無此用戶。'),
     NOT_CANT_FRIEND:customRes('0009','無法為此對象邀請好友。'),
+    INVALID_OPERATE:customRes('0010','無效操作'),
 
 
     // Database Response

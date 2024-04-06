@@ -40,17 +40,18 @@ async function getUserFriends(usersFriendsObject) {
 
     let condition = [uid1];
 
-    let sql = `select 
-            f.members_id2, 
-            m.username ,
-            approve ,
-            date_format(f.create_time, '%Y/%m/%d %H:%i:%s') as createtime ,
-            date_format(f.update_time, '%Y/%m/%d %H:%i:%s') as updatetime
-        from 
-            friends f 
-        join 
-            members m on f.members_id2 = m.members_id 
-        where 
+    let sql = `
+    select 
+      f.members_id2, 
+      m.username ,
+      approve ,
+      date_format(f.create_time, '%Y/%m/%d %H:%i:%s') as createtime ,
+      date_format(f.update_time, '%Y/%m/%d %H:%i:%s') as updatetime
+    from 
+      friends f 
+    join 
+        members m on f.members_id2 = m.members_id 
+    where 
         f.members_id1 = ? `;
 
     if (approve) {
@@ -86,6 +87,44 @@ async function updateFriendRelation(usersFriendsObject) {
         throw new AppError(responseStatus.DATABASE_UPDATE_FRIENDS_ERROR);
     }
 }
+
+
+
+/**
+ * 條件尋找指定好友
+ * @param {object} usersFriendsObject 
+ * @param {number} usersFriendsObject.uid1 使用者1
+ * @param {number} usersFriendsObject.uid2 使用者2
+ * @param {number} usersFriendsObject.approve 0:解除, 1:好友, 2:已申請, 3:待回覆
+ */
+async function findFriend(usersFriendsObject) {
+  try {
+    const { uid1, uid2, approve = 1 } = usersFriendsObject;
+    let condition = [uid1, uid2];
+    let sql = `
+      select 
+        members_id1, 
+        members_id2, 
+        approve, 
+        date_format(create_time, '%Y/%m/%d %H:%i:%s') as createtime ,
+        date_format(update_time, '%Y/%m/%d %H:%i:%s') as updatetime
+      from 
+        friends 
+      where  
+        members_id1= ? and members_id2= ?`;
+    if (approve>1) {
+      sql += ` and approve = ?`
+      condition.push(approve);
+    }
+    const [result] = await pool.query(sql,condition);
+    console.log(result);
+    return result
+  } catch (error) {
+    console.log(error);
+    throw new AppError(responseStatus.DATABASE_GET_FRIENDS_ERROR);
+  }
+}
+
 
 
 

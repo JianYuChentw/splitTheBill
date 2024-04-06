@@ -27,6 +27,10 @@ const verify = {
     return validator.isEmail(string);
   },
 
+  approveLimit:(string) => {
+    return validator.isNumeric(string, { min: 1, max:3})
+  }
+
 };
 
 
