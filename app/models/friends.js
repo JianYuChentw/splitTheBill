@@ -79,6 +79,7 @@ async function getUserFriends(usersFriendsObject) {
 async function updateFriendRelation(usersFriendsObject) {
     try {
         const {uid1, uid2, approve} = usersFriendsObject
+        console.log(uid1, uid2, approve);
         const sql = `update friends  set approve = ? , update_time = CURRENT_TIMESTAMP  where members_id1 = ? and members_id2 = ?`
         const [result] = await pool.query(sql,[approve, uid1, uid2 ])
         return result.changedRows
@@ -99,7 +100,7 @@ async function updateFriendRelation(usersFriendsObject) {
  */
 async function findFriend(usersFriendsObject) {
   try {
-    const { uid1, uid2, approve = 1 } = usersFriendsObject;
+    const { uid1, uid2, approve } = usersFriendsObject;
     let condition = [uid1, uid2];
     let sql = `
       select 
@@ -112,12 +113,11 @@ async function findFriend(usersFriendsObject) {
         friends 
       where  
         members_id1= ? and members_id2= ?`;
-    if (approve>1) {
+    if (approve > 0) {
       sql += ` and approve = ?`
       condition.push(approve);
     }
     const [result] = await pool.query(sql,condition);
-    console.log(result);
     return result
   } catch (error) {
     console.log(error);
@@ -131,5 +131,6 @@ async function findFriend(usersFriendsObject) {
 module.exports = {
   create,
   getUserFriends,
-  updateFriendRelation
+  updateFriendRelation,
+  findFriend
 };

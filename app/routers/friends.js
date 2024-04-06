@@ -7,7 +7,7 @@ const friendsCtrl = require('../controller/friends')
 
 router.get('/all', roleGuard('uid'), friendsCtrl.getFriends)
 router.post('/new', roleGuard('uid'), friendsCtrl.nweApprove)
-// router.put('/approve', roleGuard('uid'), friendsCtrl.updateApprove)
+router.put('/approve', roleGuard('uid'), friendsCtrl.promiseApprove)
 
 
 

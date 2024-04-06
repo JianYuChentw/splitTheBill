@@ -14,7 +14,7 @@ describe('User Authentication Tests', () => {
     beforeAll((done) => {
       request(app)
         .post('/users/login') 
-        .send({ username: 'user5', password: 'password5' })
+        .send({ username: 'tset1', password: 'ejwhiuh456' })
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)

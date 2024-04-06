@@ -49,8 +49,7 @@ const friendsController = {
         return res.json(responseStatus.NOT_HAVE_USER);
       }
 
-      const isUserFriends = await friendsModel.getUserFriends({ uid1: uid2 });
-
+      const isUserFriends = await friendsModel.findFriend({ uid1: uid2 ,uid2: uid });
       if (
         uid2 == uid ||
         (isUserFriends.length > 0 && isUserFriends[0].approve > 0)
@@ -86,23 +85,23 @@ const friendsController = {
       const username = req.query.userName;
       const { membersId: uid2 } = await userModel.read({ username });
 
-      const ishaveApproved = await friendsModel.findFriends({
+    //   確認與對方關係
+      const ishaveApproved = await friendsModel.findFriend({
         uid1,
         uid2,
         approve: 3,
       });
-      const ishaveResponds = await friendsModel.findFriends({
+    //   確認與我方關係
+      const ishaveResponds = await friendsModel.findFriend({
         uid1: uid2,
         uid2: uid1,
         approve: 2,
       });
-
-      if (ishaveApproved.length === 0 || ishaveResponds.length === 0) {
+      if (ishaveApproved.length == 0 || ishaveResponds.length === 0) {
         return res.json(responseStatus.INVALID_OPERATE);
       }
-
-      friendsModel.updateFriendRelation({ uid1, uid2, approve: 1 });
-      friendsModel.updateFriendRelation({ uid1: uid2, uid2: uid1, approve: 1 });
+      await friendsModel.updateFriendRelation({ uid1, uid2, approve: 1 });
+      await friendsModel.updateFriendRelation({ uid1: uid2, uid2: uid1, approve: 1 });
 
       return res.json(responseStatus.SUCCESS);
     } catch (error) {
