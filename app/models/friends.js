@@ -79,7 +79,6 @@ async function getUserFriends(usersFriendsObject) {
 async function updateFriendRelation(usersFriendsObject) {
     try {
         const {uid1, uid2, approve} = usersFriendsObject
-        console.log(uid1, uid2, approve);
         const sql = `update friends  set approve = ? , update_time = CURRENT_TIMESTAMP  where members_id1 = ? and members_id2 = ?`
         const [result] = await pool.query(sql,[approve, uid1, uid2 ])
         return result.changedRows
