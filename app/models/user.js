@@ -82,7 +82,7 @@ async function read(indexObject) {
     const [result] = await pool.query(sql, values);
     return result[0];
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new AppError(responseStatus.DATABASE_READ_USER_ERROR);
   }
 }
@@ -102,7 +102,7 @@ async function updatePassword(uid, newPassword) {
     const [result] = await pool.query(sql, values);
     return result.affectedRows
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new AppError(responseStatus.DATABASE_UPDATE_USER_ERROR);
   }
 }

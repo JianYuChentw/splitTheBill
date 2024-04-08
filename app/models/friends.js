@@ -22,7 +22,7 @@ async function create(usersObject) {
     ]);
     return { affectedRows, insertId };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new AppError(responseStatus.DATABASE_CREATE_FRIENDS_ERROR);
   }
 }
@@ -62,7 +62,7 @@ async function getUserFriends(usersFriendsObject) {
     const [result] = await pool.query(sql, condition);
     return result;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new AppError(responseStatus.DATABASE_GET_FRIENDS_ERROR);
   }
 }
@@ -83,7 +83,7 @@ async function updateFriendRelation(usersFriendsObject) {
         const [result] = await pool.query(sql,[approve, uid1, uid2 ])
         return result.changedRows
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new AppError(responseStatus.DATABASE_UPDATE_FRIENDS_ERROR);
     }
 }
@@ -119,7 +119,7 @@ async function findFriend(usersFriendsObject) {
     const [result] = await pool.query(sql,condition);
     return result
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw new AppError(responseStatus.DATABASE_GET_FRIENDS_ERROR);
   }
 }
