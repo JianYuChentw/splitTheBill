@@ -33,7 +33,7 @@ foreign key(members_id2) references members(members_id)
 
 create table `bills`(
 `bills_id` int auto_increment primary key comment '帳單id',
-`creat_uid` int not null comment'建立者',
+`create_uid` int not null comment'建立者',
 `bills_title` varchar(50) not null comment'帳單名',
 `status` int default 1 not null comment'帳單狀態, 0 = 刪除, 1 = 已建立, 2 = 拆帳中, 3 = 完成 ',
 `bills_total` int default 0 comment '總金額',
