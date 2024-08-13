@@ -89,7 +89,7 @@ const friendsController = {
       return res.json(responseStatus.OPERATE_ERROR);
     }
   },
-  Approve: async (req, res) => {
+  approve: async (req, res) => {
     try {
     } catch (error) {
       console.error(error);

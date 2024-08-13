@@ -8,17 +8,17 @@ function customRes(code,msg) {
 // 回應管理
 const status ={
     // 系統回應
-    SUCCESS:customRes('0001','成功。'),
-    SYSTEM_ERROR:customRes('0002','系統發生錯誤。'),
+    SUCCESS:customRes(200, '成功。'),
+    SYSTEM_ERROR:customRes(500, '系統發生錯誤。'),
 
     // controllers Response
     // 使用者
   
-    LOGIN_FAIL:customRes('0003','登入失敗，請重新確認名稱或密碼。'),
+    LOGIN_FAIL:customRes( 401, '登入失敗，請重新確認名稱或密碼。'),
     NOT_LOGIN_USER:customRes('0004','非登入狀態，請重新登入。'),
     OPERATE_ERROR:customRes('0005','操作失敗，請重新嘗試。'),
     PARAMETER_LIMIT:customRes('0006','參數不符合限制。'),
-    PHONENUMBER_IS_EXIST:customRes('0007','電話已註冊。'),
+    PHONENUMBER_IS_EXIST:customRes(409,'電話號碼已存在。'),
     NOT_HAVE_USER:customRes('0008','無此用戶。'),
     NOT_CANT_FRIEND:customRes('0009','無法為此對象邀請好友。'),
     INVALID_OPERATE:customRes('0010','無效操作'),
